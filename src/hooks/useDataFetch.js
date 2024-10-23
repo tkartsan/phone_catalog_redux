@@ -1,12 +1,24 @@
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useProductsDataStore } from '../store';
+import {
+  setAccessoriesData as setReduxAccessoriesData,
+  setPhonesData as setReduxPhonesData,
+  setProductsData as setReduxProductsData,
+  setTabletsData as setReduxTabletsData,
+} from '../store/itemsDataSlice';
 
 import { useFetch } from './useFetch';
 
 export const useDataFetch = () => {
-  const { setPhonesData, setTabletsData, setAccessoriesData, setProductsData } =
-    useProductsDataStore();
+  const dispatch = useDispatch();
+  const {
+    setPhonesData: setZustandPhonesData,
+    setTabletsData: setZustandTabletsData,
+    setAccessoriesData: setZustandAccessoriesData,
+    setProductsData: setZustandProductsData,
+  } = useProductsDataStore();
 
   const { data: phonesData } = useFetch('/api/phones.json');
   const { data: tabletsData } = useFetch('/api/tablets.json');
@@ -15,25 +27,29 @@ export const useDataFetch = () => {
 
   useEffect(() => {
     if (phonesData) {
-      setPhonesData(phonesData);
+      setZustandPhonesData(phonesData);
+      dispatch(setReduxPhonesData(phonesData));
     }
-  }, [phonesData, setPhonesData]);
+  }, [phonesData]);
 
   useEffect(() => {
     if (tabletsData) {
-      setTabletsData(tabletsData);
+      setZustandTabletsData(tabletsData);
+      dispatch(setReduxTabletsData(tabletsData));
     }
-  }, [tabletsData, setTabletsData]);
+  }, [tabletsData]);
 
   useEffect(() => {
     if (accessoriesData) {
-      setAccessoriesData(accessoriesData);
+      setZustandAccessoriesData(accessoriesData);
+      dispatch(setReduxAccessoriesData(accessoriesData));
     }
-  }, [accessoriesData, setAccessoriesData]);
+  }, [accessoriesData]);
 
   useEffect(() => {
     if (productsData) {
-      setProductsData(productsData);
+      setZustandProductsData(productsData);
+      dispatch(setReduxProductsData(productsData));
     }
-  }, [productsData, setProductsData]);
+  }, [productsData]);
 };
