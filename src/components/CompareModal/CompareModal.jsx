@@ -1,12 +1,14 @@
 import React, { useRef } from 'react';
 import ReactDOM from 'react-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
-import { useCompareStore } from '../../store';
+import { removeDeviceFromCompare } from '../../store/compareSlice';
 
 export const CompareModal = ({ closeModal }) => {
-  const { comparedDevices, removeDeviceFromCompare } = useCompareStore();
+  const dispatch = useDispatch();
+  const { comparedDevices } = useSelector((state) => state.compare);
   const navigate = useNavigate();
   const slideRef = useRef(null);
 
@@ -61,7 +63,7 @@ export const CompareModal = ({ closeModal }) => {
 
               <button
                 className="absolute top-0 right-0 bg-white rounded-full p-1 text-gray-600 hover:text-gray-900"
-                onClick={() => removeDeviceFromCompare(device.id)}
+                onClick={() => dispatch(removeDeviceFromCompare(device.id))}
               >
                 ✕
               </button>

@@ -1,18 +1,18 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-import { useFavoritesStore } from '../../store';
 import { Breadcrumb } from '../Breadcrumb';
 import { DeviceCard } from '../Shared/DeviceCard';
 
 export const FavoritePhones = () => {
-  const { favorites } = useFavoritesStore();
+  const { favorites } = useSelector((state) => state.favorites);
 
   if (!favorites || favorites.length === 0) {
     return (
       <div className="container">
         <Breadcrumb />
-        <h1 className="title">Favourites</h1>
-        <p className="subtitle">Your favourites list is empty.</p>
+        <h1 className="title">Favorites</h1>
+        <p className="subtitle">Your favorites list is empty.</p>
       </div>
     );
   }
@@ -22,7 +22,7 @@ export const FavoritePhones = () => {
   return (
     <div className="container">
       <Breadcrumb />
-      <div className="title">Favourites</div>
+      <div className="title">Favorites</div>
       <p className="subtitle">{deviceCount} models</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {favorites.map((phone) => (

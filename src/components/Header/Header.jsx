@@ -1,11 +1,10 @@
 import './Header.css';
 
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import { HeartIcon, HomeIcon, WebsiteLogo } from '../../assets';
-import { useCartStore } from '../../store/useCartStore';
-import { useFavoritesStore } from '../../store/useFavoritesStore';
 
 export const Header = () => {
   const navLinks = [
@@ -15,11 +14,11 @@ export const Header = () => {
     { to: '/accessories', label: 'Accessories' },
   ];
 
-  const { totalItemsInCart } = useCartStore();
-  const { favorites } = useFavoritesStore();
+  const { cart } = useSelector((state) => state.cart);
+  const { favorites } = useSelector((state) => state.favorites);
 
   const favoriteCount = favorites.length;
-  const cartCount = totalItemsInCart();
+  const cartCount = cart.reduce((acc, item) => acc + (item.quantity || 1), 0);
 
   const navigate = useNavigate();
   const location = useLocation();

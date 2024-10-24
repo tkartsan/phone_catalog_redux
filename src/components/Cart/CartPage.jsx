@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useCartStore } from '../../store';
+import {
+  clearCart,
+  removeFromCart,
+  updateCartQuantity,
+} from '../../store/cartSlice';
 
 export const CartPage = () => {
-  const {
-    cart,
-    removeFromCart,
-    updateCartQuantity,
-    totalItemsInCart,
-    clearCart,
-  } = useCartStore();
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => state.cart);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const totalPrice = cart.reduce(
@@ -43,7 +43,7 @@ export const CartPage = () => {
               >
                 <div className="flex items-center gap-4">
                   <button
-                    onClick={() => removeFromCart(purchase.id)}
+                    onClick={() => dispatch(removeFromCart(purchase.id))}
                     className="text-bgColorLightGrey hover:text-bgColorGrey"
                   >
                     &#10005;
@@ -68,9 +68,14 @@ export const CartPage = () => {
                           : 'text-colorGrey border-colorGrey border-solid'
                       }`}
                       onClick={() =>
-                        updateCartQuantity(
-                          purchase.id,
-                          Math.max((purchase.quantity || 1) - 1, 1),
+                        dispatch(
+                          updateCartQuantity({
+                            phoneId: purchase.id,
+                            newQuantity: Math.max(
+                              (purchase.quantity || 1) - 1,
+                              1,
+                            ),
+                          }),
                         )
                       }
                     >
@@ -80,9 +85,11 @@ export const CartPage = () => {
                     <button
                       className="w-8 h-8 justify-center text-colorGrey border-solid border-colorGrey"
                       onClick={() =>
-                        updateCartQuantity(
-                          purchase.id,
-                          (purchase.quantity || 1) + 1,
+                        dispatch(
+                          updateCartQuantity({
+                            phoneId: purchase.id,
+                            newQuantity: (purchase.quantity || 1) + 1,
+                          }),
                         )
                       }
                     >
@@ -103,8 +110,8 @@ export const CartPage = () => {
                   ${totalPrice}
                 </div>
                 <div className="flex justify-center text-[14px] font-medium text-colorDifferentGrey">
-                  Total for {totalItemsInCart()}
-                  {totalItemsInCart() > 1 ? ' items' : ' item'}
+                  Total for {cart.length}
+                  {cart.length > 1 ? ' items' : ' item'}
                 </div>
               </div>
               <div className="w-full h-[1px] bg-colorDifferentGrey"></div>
@@ -135,7 +142,7 @@ export const CartPage = () => {
               <button
                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
                 onClick={() => {
-                  clearCart();
+                  dispatch(clearCart());
                   handleCloseModal();
                 }}
               >

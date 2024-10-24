@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { devicesColorNamesMap } from '../../global/constants';
-import { useCartStore, useCompareStore } from '../../store';
+import { addToCart, removeFromCart } from '../../store/cartSlice';
+import { addDeviceToCompare } from '../../store/compareSlice';
 import { CompareModal } from '../CompareModal';
 
 export const PurchasePanel = ({
@@ -12,9 +14,10 @@ export const PurchasePanel = ({
   selectedCapacity,
   handleCapacityChange,
 }) => {
-  const { addToCart, removeFromCart, isInCart } = useCartStore();
-  const { addDeviceToCompare, comparedDevices } = useCompareStore();
-  const isInCartState = isInCart(item.id);
+  const dispatch = useDispatch();
+  const { comparedDevices } = useSelector((state) => state.compare);
+  const { cart } = useSelector((state) => state.cart);
+  const isInCartState = cart.some((cartItem) => cartItem.id === item.id);
   const [isCompareModalOpen, setCompareModalOpen] = useState(false);
 
   useEffect(() => {
@@ -25,14 +28,14 @@ export const PurchasePanel = ({
 
   const handleCartAction = () => {
     if (isInCartState) {
-      removeFromCart(item.id);
+      dispatch(removeFromCart(item.id));
     } else {
-      addToCart(item);
+      dispatch(addToCart(item));
     }
   };
 
   const handleCompareClick = () => {
-    addDeviceToCompare(item, itemType);
+    dispatch(addDeviceToCompare({ device: item, deviceType: itemType }));
   };
 
   const isCompareDisabled = comparedDevices.length >= 2;

@@ -1,31 +1,36 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { HeartIcon, RedHeartIcon } from '../../assets';
-import { useCartStore } from '../../store/useCartStore';
-import { useFavoritesStore } from '../../store/useFavoritesStore';
+import { addToCart, removeFromCart } from '../../store/cartSlice';
+import { addFavorite, removeFavorite } from '../../store/favoritesSlice';
 
 export const DeviceCard = ({ item, itemType, isShowDiscount }) => {
-  const { addToCart, removeFromCart, isInCart } = useCartStore();
-  const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => state.cart);
+  const { favorites } = useSelector((state) => state.favorites);
+
+  const isInCart = cart.some((cartItem) => cartItem.id === item.id);
+  const isFavorite = favorites.some(
+    (favoriteItem) => favoriteItem.id === item.id,
+  );
 
   const handleToggleFavorite = () => {
-    if (isFavorite(item.id)) {
-      removeFavorite(item.id);
+    if (isFavorite) {
+      dispatch(removeFavorite(item.id));
     } else {
-      addFavorite(item);
+      dispatch(addFavorite(item));
     }
   };
 
   const handleCartClick = () => {
-    if (isInCart(item.id)) {
-      removeFromCart(item.id);
+    if (isInCart) {
+      dispatch(removeFromCart(item.id));
     } else {
-      addToCart(item);
+      dispatch(addToCart(item));
     }
   };
-
-  const isAddedToCart = isInCart(item.id);
 
   return (
     <Link to={`/${itemType}/${item.id}`} className="no-underline">
@@ -73,7 +78,7 @@ export const DeviceCard = ({ item, itemType, isShowDiscount }) => {
         <div className="mt-0 flex gap-2">
           <button
             className={`w-full px-4 py-2 border ${
-              isAddedToCart
+              isInCart
                 ? 'bg-white text-green-500 border-colorLightGrey border-solid'
                 : 'bg-black text-white'
             }`}
@@ -82,7 +87,7 @@ export const DeviceCard = ({ item, itemType, isShowDiscount }) => {
               handleCartClick();
             }}
           >
-            {isAddedToCart ? 'Added to cart' : 'Add to cart'}
+            {isInCart ? 'Added to cart' : 'Add to cart'}
           </button>
           <button
             className="w-10 h-10 flex justify-center items-center border-solid border-colorLightGrey"
@@ -91,7 +96,7 @@ export const DeviceCard = ({ item, itemType, isShowDiscount }) => {
               handleToggleFavorite();
             }}
           >
-            {isFavorite(item.id) ? <RedHeartIcon /> : <HeartIcon />}
+            {isFavorite ? <RedHeartIcon /> : <HeartIcon />}
           </button>
         </div>
       </div>
