@@ -1,5 +1,5 @@
 export const getTopDiscountedPhones = (phonesData, limit = 10) => {
-  return phonesData
+  return [...phonesData]
     .sort((a, b) => {
       const discountA = a.priceRegular - a.priceDiscount;
       const discountB = b.priceRegular - b.priceDiscount;

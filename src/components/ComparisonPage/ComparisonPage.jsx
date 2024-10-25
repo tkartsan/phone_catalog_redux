@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-
-import { useCompareStore } from '../../store';
+import { useSelector } from 'react-redux';
 
 export const ComparisonPage = () => {
-  const { comparedDevices } = useCompareStore();
+  const { comparedDevices } = useSelector((state) => state.compare);
   const [hideIdenticalLines, setHideIdenticalLines] = useState(false);
 
   if (comparedDevices.length === 0) {

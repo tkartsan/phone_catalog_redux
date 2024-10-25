@@ -1,4 +1,3 @@
-// utils/getItemsWithNumericId.js
 export const getItemsWithNumericId = (items = [], products = []) => {
   if (!items || !products) {
     return [];

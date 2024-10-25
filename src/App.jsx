@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
 import { Accessories } from './components/Accessories';
@@ -16,12 +17,15 @@ import { TabletDetails } from './components/TabletDetails';
 import { Tablets } from './components/Tablets';
 import { useDataFetch } from './hooks/useDataFetch';
 import { getItemsWithNumericId } from './utils/getItemsWithNumericId';
-import { useProductsDataStore } from './store';
 
 function App() {
   useDataFetch();
-  const { phonesData, tabletsData, accessoriesData, productsData } =
-    useProductsDataStore();
+  const {
+    phonesData = [],
+    tabletsData = [],
+    accessoriesData = [],
+    productsData = [],
+  } = useSelector((state) => state.itemsData || {});
 
   return (
     <div className="flex flex-col min-h-screen">
