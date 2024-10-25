@@ -106,7 +106,7 @@ export const PurchasePanel = ({
           isCompareDisabled ? 'bg-colorBorderGrey' : 'bg-black'
         }`}
         onClick={handleCompareClick}
-        disabled={isCompareDisabled} // Disable the button when 2 devices are already added
+        disabled={isCompareDisabled}
       >
         Compare
       </button>
