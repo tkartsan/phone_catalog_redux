@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import {
-  setAccessoriesData as setReduxAccessoriesData,
-  setPhonesData as setReduxPhonesData,
-  setProductsData as setReduxProductsData,
-  setTabletsData as setReduxTabletsData,
+  setAccessoriesData,
+  setPhonesData,
+  setProductsData,
+  setTabletsData,
 } from '../store/itemsDataSlice';
 
 import { useFetch } from './useFetch';
@@ -20,25 +20,25 @@ export const useDataFetch = () => {
 
   useEffect(() => {
     if (phonesData) {
-      dispatch(setReduxPhonesData(phonesData));
+      dispatch(setPhonesData(phonesData));
     }
   }, [phonesData]);
 
   useEffect(() => {
     if (tabletsData) {
-      dispatch(setReduxTabletsData(tabletsData));
+      dispatch(setTabletsData(tabletsData));
     }
   }, [tabletsData]);
 
   useEffect(() => {
     if (accessoriesData) {
-      dispatch(setReduxAccessoriesData(accessoriesData));
+      dispatch(setAccessoriesData(accessoriesData));
     }
   }, [accessoriesData]);
 
   useEffect(() => {
     if (productsData) {
-      dispatch(setReduxProductsData(productsData));
+      dispatch(setProductsData(productsData));
     }
   }, [productsData]);
 };
