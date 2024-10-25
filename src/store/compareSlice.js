@@ -23,7 +23,6 @@ const compareSlice = createSlice({
         state.deviceType = deviceType;
       } else if (!state.comparedDevices.some((d) => d.id === device.id)) {
         state.comparedDevices.push(device);
-        state.deviceType = deviceType;
       }
     },
 
